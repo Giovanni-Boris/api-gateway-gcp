@@ -1,0 +1,127 @@
+# openapi2-functions.yaml
+swagger: '2.0'
+info:
+  title: api-gateway
+  description: Sample API on API Gateway with a Google Cloud Functions as backend
+  version: 1.0.0
+  
+host: "my-api-3ar6taf1x8xoc.apigateway.xenon-effect-442521-d4.cloud.goog"
+x-google-endpoints:
+  - name: "my-api-3ar6taf1x8xoc.apigateway.xenon-effect-442521-d4.cloud.goog"
+    allowCors: True
+schemes:
+  - https
+produces:
+  - application/json
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "x-api-key"
+    in: "header"
+security:
+ - api_key: []
+paths:
+  /product:
+    get:
+      summary: get product
+      operationId: get product
+      x-google-backend:
+        address: https://product-cloud-run-34414109870.us-central1.run.app/product
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: object
+    post:
+      summary: Create product
+      operationId: createProduct
+      x-google-backend:
+        address: https://product-cloud-run-34414109870.us-central1.run.app/product
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/Product'
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: object
+  /user:
+    get:
+      summary: get users
+      operationId: users
+      x-google-backend:
+        address: https://user-cloud-run-34414109870.us-central1.run.app/user
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: object
+    post:
+      summary: post users
+      operationId: create users
+      x-google-backend:
+        address: https://user-cloud-run-34414109870.us-central1.run.app/user
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: object
+
+  /user/login:
+    post:
+      summary: login post users
+      operationId: login users
+      x-google-backend:
+        address: https://user-cloud-run-34414109870.us-central1.run.app/user/login
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        '200':
+          description: A successful response
+
+definitions:
+  Product:
+    type: object
+    properties:
+      codigo:
+        type: string
+      nombre:
+        type: string
+      descripcion:
+        type: string
+      cantidad:
+        type: integer
+      precioUnitario:
+        type: number
+      categoria:
+        type: string
+  User:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      email:
+        type: string
+  Login:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+
